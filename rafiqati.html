@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رفيقتي 🪷 | بلانرك الرمضاني</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+body{margin:0;background:#FFF5F7;color:#4A1A2A;padding:0 0 95px}
+.top{background:linear-gradient(135deg,#F8BBD0,#F06292);color:#fff;text-align:center;padding:22px 14px;border-radius:0 0 26px 26px}
+.top h1{margin:0;font-size:28px}
+.top p{margin:6px 0 0;font-size:13px;color:#FFF0F3;line-height:1.6}
+.page{display:none;max-width:580px;margin:auto;padding:14px}
+.page.active{display:block}
+.card{background:#fff;border:1.5px solid #FCE4EC;border-radius:20px;padding:14px;margin-top:14px}
+.card h3{margin:0 0 6px;color:#C2185B;font-size:18px}
+.card p{margin:0;font-size:13px;color:#8A5A6E;line-height:1.7}
+.hint{background:#FFF8E1;border:1.5px solid #F5D9A0;border-radius:12px;padding:10px;font-size:13px;line-height:1.7;margin-top:10px}
+input,textarea,select{width:100%;padding:12px;border:1.5px solid #F8BBD0;border-radius:13px;margin-top:8px;font-size:14px;background:#FFFEFB}
+textarea{min-height:70px}
+button{border:none;padding:13px;border-radius:13px;font-weight:bold;cursor:pointer;font-size:14px}
+.btn-pink{background:#C2185B;color:#fff;width:100%;margin-top:10px}
+.btn-light{background:#FCE4EC;color:#C2185B}
+.row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.row input{margin:0;flex:1}
+.check{width:44px;height:44px;min-width:44px;border-radius:12px;border:2px solid #F8BBD0;background:#fff;font-size:18px;cursor:pointer}
+.check.done{background:#C2185B;color:#fff;border-color:#C2185B}
+.prayGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pray{padding:12px;border-radius:14px;border:1.5px solid #F8BBD0;text-align:center;cursor:pointer;background:#fff}
+.pray.done{background:#C2185B;color:#fff}
+.moodBtn{padding:9px 12px;border-radius:20px;border:1.5px solid #F8BBD0;background:#fff;cursor:pointer;margin:3px}
+.moodBtn.active{background:#F8BBD0;font-weight:bold}
+.bar{height:13px;background:#FCE4EC;border-radius:20px;overflow:hidden;margin-top:10px}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,#F06292,#E8C07A)}
+.nav{position:fixed;bottom:10px;left:10px;right:10px;max-width:580px;margin:auto;background:#fff;border-radius:22px;box-shadow:0 8px 25px rgba(0,0,0,.15);display:flex;padding:7px;border:1.5px solid #FCE4EC;z-index:99;overflow-x:auto}
+.nav button{flex:1;min-width:62px;background:transparent;color:#9A7A8A;font-size:11px;padding:7px 2px}
+.nav button.active{background:#FCE4EC;color:#C2185B;border-radius:14px}
+.duabox{background:#FFF5F7;border:1.5px solid #FCE4EC;border-radius:14px;padding:12px;margin-top:10px;line-height:1.9;font-size:14px}
+.stars{font-size:22px;cursor:pointer;letter-spacing:2px}
+.star.on{color:#E8A020}
+.star{color:#E0C8D0}
+.habitTable{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th,td{border:1px solid #F8BBD0;padding:6px;text-align:center;font-size:12px}
+th{background:#FCE4EC;color:#C2185B}
+td input{border:none;padding:6px;margin:0;text-align:center;width:100%;background:transparent}
+.cell{width:28px;height:28px;border-radius:8px;border:1.5px solid #F8BBD0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.cell.done{background:#C2185B;color:#fff}
+.budgetGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.budgetGrid div{background:#FFF5F7;border-radius:12px;padding:10px;text-align:center;border:1.5px solid #FCE4EC}
+.budgetGrid b{color:#C2185B}
+.motivation{background:linear-gradient(135deg,#C2185B,#F06292);color:#fff;padding:14px;border-radius:16px;text-align:center;line-height:1.7;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="top">
+<h1>رفيقتي 🪷</h1>
+<p>بلانرك الرمضاني - 30 يوم<br>اليوم <span id="topDay">1</span> من 30 - تقدمك <span id="topPct">0%</span><br>رفيقتك في كل خطوة، بلا ضغط، على مهلك</p>
+<div style="margin-top:10px"><select id="daySel" onchange="setDay(this.value)" style="margin:0"></select></div>
+</div>
+
+<!-- 1 اليوم -->
+<div id="p-day" class="page active">
+<div class="motivation" id="dailyMotivation"></div>
+<div class="card"><h3>💖 مشاعري اليوم</h3><p>اختاري شعورك و طاقتك. هادا يساعدك تفهمي روحك أكثر.</p><div id="moods"></div><p style="margin-top:10px"><b>⚡ طاقتي:</b></p><div id="energy"></div></div>
+
+<div class="card"><h3>🎯 3 أهدافي في رمضان</h3><p><b>كيفاش تستعمليها؟</b> اكتبي 3 أهداف برك، ماشي 10! هدف واضح و صغير أحسن من هدف كبير ما تكمليهش. مثلا: أختم القرآن، نولي نصلي في وقتي، نتعلم نهدى.</p><input id="goal1" placeholder="هدفي 1: ..." oninput="save()"><input id="goal2" placeholder="هدفي 2: ..." oninput="save()"><input id="goal3" placeholder="هدفي 3: ..." oninput="save()"></div>
+
+<div class="card"><h3>✅ To Do List - مهامي اليوم</h3><p>اكتبي مهامك و كوشي عليها كي تكمليها ✔️</p><div id="todo"></div><button class="btn-pink" onclick="addTodo()">+ زيدي مهمة</button></div>
+
+<div class="card"><h3>⏰ روتيني اليومي</h3><p><b>كيفاش؟</b> انتي تتحكمي في الوقت! اكتبي الوقت اللي يناسبك و واش تديري فيه، و كوشي ✔️ كي تكمليه.</p><div id="routine"></div><button class="btn-pink" onclick="addRoutine()">+ زيدي خطوة في روتيني</button><div class="hint">مثال: 05:00 - السحور | 08:00 - قرآن | 17:00 - تحضير الفطور | 21:00 - تراويح</div></div>
+<button class="btn-pink" onclick="saveDay()">💖 حفظ يومي</button><p id="saved" style="text-align:center;color:#C2185B;font-weight:bold"></p>
+</div>
+
+<!-- 2 الصلاة -->
+<div id="p-pray" class="page">
+<div class="card"><h3>الصلاة</h3><p>كلمة وحدو: <b>الصلاة</b> هي عماد الدين و أول ما تحاسبي عليه. اضغطي على الصلاة كي تصليها.</p><div class="prayGrid" id="prayers"></div><div class="hint">🤲 نصيحة: صلي كل صلاة في وقتها، و ادعي بعدها. رمضان فرصة تولفي الصلاة في وقتها.</div></div>
+<div class="card"><h3>القرآن</h3><p>كلمة وحدو: <b>القرآن</b> هو نور رمضان. حتى صفحة وحدة كل يوم تفرق!</p><input type="number" id="quran" placeholder="شحال قريتي اليوم؟ مثلا: 5 صفحات" oninput="save()"><input id="sura" placeholder="واش هي السورة؟ مثلا: البقرة" oninput="save()"><p style="margin-top:10px"><b>مجموع ختمتك:</b> <span id="quranTotal">0</span> صفحة</p><div class="hint">✨ القرآن 604 صفحة. إذا قريتي 20 صفحة كل يوم، تختميه في رمضان!</div></div>
+</div>
+
+<!-- 3 العادات 30 يوم -->
+<div id="p-habits" class="page">
+<div class="card"><h3>✅ متتبع العادات - 30 يوم / 10 عادات</h3><p><b>كيفاش؟</b> كيما بلانر 21 يوم اللي درناه قبل! اكتبي في اليسار 10 عادات حابة تديريهم، و كل يوم كوشي ✔️ على العادة اللي درتيها. الأعمدة هي الأيام من 1 حتى 30.</p><div class="hint">💡 ابداي بـ 3 عادات برك، و زيدي بالشوية. الاستمرار أهم من الكثرة!</div><div class="habitTable"><table><thead><tr><th>العادة / اليوم</th><th colspan="30">1 → 30</th></tr></thead><tbody id="habitBody"></tbody></table></div></div>
+<div class="card"><h3>🗺️ رحلتي - تقويم 30 يوم</h3><div class="bar"><div class="fill" id="fill"></div></div><div id="grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px"></div></div>
+<div class="card"><h3>🏆 محطاتي</h3><p>🎖️ <b>أول خطوة:</b> بعد يوم 1 - بديتي الرحلة!<br>🌸 <b>أسبوع:</b> بعد 7 أيام<br>🔥 <b>محطة 15:</b> نصف الطريق!<br>🏆 <b>أتممت الرحلة:</b> بعد 30 يوم - فخورة بيك!</p></div>
+</div>
+
+<!-- 4 يومياتي -->
+<div id="p-diary" class="page">
+<div class="card"><h3>✍️ يومياتي</h3><p>اكتبي بدون رقابة. هادي المساحة ليك انتي برك!</p><textarea id="free" placeholder="اكتبي اللي يجي في بالك..." oninput="save()"></textarea></div>
+<div class="card"><h3>🌙 ذكرى اليوم</h3><p>سطر واحد يكفي! بعد سنوات راح تفرحي كي تقرايها.</p><input id="memory" placeholder="أجمل ذكرى اليوم كانت..." oninput="save()"></div>
+<div class="card"><h3>🙏 الامتنان - 5 أشياء</h3><input id="g1" placeholder="1. أنا ممتنة لـ ..." oninput="save()"><input id="g2" placeholder="2. ..." oninput="save()"><input id="g3" placeholder="3. ..." oninput="save()"><input id="g4" placeholder="4. ..." oninput="save()"><input id="g5" placeholder="5. ..." oninput="save()"></div>
+<div class="card"><h3>💌 جدار الذكريات</h3><div id="wall"></div></div>
+</div>
+
+<!-- 5 ميزانية + مشتريات -->
+<div id="p-money" class="page">
+<div class="card"><h3>💰 منظم ميزانية رمضان</h3><p><b>كيفاش؟</b> اكتبي مدخولك، و شحال حابة تدخري و تتصدقي، و هو يحسبلك المتبقي وحدو!</p><label>مدخولي</label><input type="number" id="income" placeholder="مثلا: 50000" oninput="calcBudget()"><label>الادخار</label><input type="number" id="saving" placeholder="مثلا: 5000" oninput="calcBudget()"><label>الصدقة</label><input type="number" id="sadaqa" placeholder="مثلا: 2000" oninput="calcBudget()"><div class="budgetGrid"><div>مدخولي<br><b id="bIncome">0</b></div><div>الادخار<br><b id="bSaving">0</b></div><div>الصدقة<br><b id="bSadaqa">0</b></div><div>المتبقي<br><b id="bLeft" style="font-size:18px">0</b></div></div><div class="hint">💡 المتبقي = مدخولي - الادخار - الصدقة. حاولي تخلي المتبقي يكفيك لمصروف الشهر كامل!</div></div>
+<div class="card"><h3>🛒 مشترياتي</h3><p>اكتبي واش حابة تشري، و كي تشريه كوشي ✔️ تم!</p><div id="shop"></div><button class="btn-pink" onclick="addShop()">+ زيدي حاجة نشريها</button></div>
+</div>
+
+<!-- 6 بودكاست -->
+<div id="p-media" class="page">
+<div class="card"><h3>🎧 بودكاست و فيديوهات مفيدة أشاهدها</h3><p><b>كيفاش؟</b> كل فيديو ليه عنوان وحدو، نجوم وحدو، و ✔️ وحدو. اكتبي العنوان، قيمي بالنجوم، و كوشي كي تكمليه!</p><div id="media"></div><button class="btn-pink" onclick="addMedia()">+ زيدي فيديو / بودكاست</button><div class="hint">مثال: بودكاست عن الصبر، فيديو عن تنظيم الوقت، فيديو عن القرآن...</div></div>
+<div class="card"><h3>📚 المكتبة</h3><div class="duabox"><b>🌸 لما يكبر الضغط: ارجعي للحظة اللي راكي فيها</b><br>خذي نفس عميق 4 ثواني، احبسيه 4 ثواني، خرجيه 4 ثواني. عاوديها 3 مرات.</div><div class="duabox"><b>💛 الرفق بروحك ماشي دلع ولا ضعف</b><br>احكي مع روحك كيما تحكي مع صاحبتك اللي تحبيها.</div><div class="duabox"><b>✨ عادة صغيرة تناسبك خير من خطة تكسرك</b><br>ابداي بعادة 5 دقايق برك!</div></div>
+</div>
+
+<!-- 7 أدعيتي -->
+<div id="p-dua" class="page">
+<div class="card"><h3>🤲 أدعيتي</h3><p style="font-size:15px;color:#C2185B;font-weight:bold;text-align:center">« أَمَّن يُجِيبُ الْمُضْطَرَّ إِذَا دَعَاهُ »</p><p>هاد الركن هو مساحتك الخاصة مع ربي. اكتبي أدعيتك، استغفارك، و كل ما في قلبك. ربي يسمعك، حتى لو ما قدرتيش تعبري بالكلمات.</p><label><b>استغفار اليوم:</b></label><input id="istighfar" placeholder="مثلا: أستغفر الله العظيم 100 مرة" oninput="save()"><label><b>أدعيتي الخاصة:</b></label><textarea id="myDua" placeholder="يا ربي..." oninput="save()"></textarea></div>
+
+<div class="card"><h3>📖 أدعية من القرآن الكريم</h3><p>كل دعاء مساميه ✔️ كوشي عليه كي تقرايه / تدعي بيه.</p><div id="quranDuas"></div></div>
+
+<div class="card"><h3>🌸 أدعية الأنبياء - صلوات الله عليهم</h3><p>كل دعاء كيما راه مكتوب، مساميه ✔️</p><div id="prophetDuas"></div></div>
+
+<div class="card"><h3>👑 تاج الذكر</h3><div class="duabox">﴿ لا اله الا الله وحده لا شريك له له الملك وله الحمد وهو على كل شي قدير ﴾<br><div class="row"><span>ردديه و كوشي:</span><button class="check" id="checkTaj" onclick="toggleCheck('taj',this)">✔️</button></div></div>
+<h3 style="margin-top:14px">🕋 الصلاة الإبراهيمية</h3><div class="duabox">﴿ اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ. اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ ﴾<br><div class="row"><span>صليتيها اليوم؟</span><button class="check" id="checkIbrahim" onclick="toggleCheck('ibrahim',this)">✔️</button></div></div></div>
+
+<div class="card"><h3>📖 قراءة سورة البقرة يوميا</h3><p>قال الرسول ﷺ «اقْرَءُوا سُورَةَ البَقَرَةِ، فإنَّ أخْذَهَا بَرَكَةٌ، وتَرْكَهَا حَسْرَةٌ، ولَا تَسْتَطِيعُهَا البَطَلَةُ»</p><p><b>خطة سهلة:</b> سورة البقرة 286 آية، قسميها على 4 مرات في اليوم:</p><p>📖 بعد الفجر أو الصبح: من 1 إلى 74 (15-20 د)<br>📖 بعد الظهر: من 75 إلى 148<br>📖 بعد العصر أو المغرب: من 149 إلى 221<br>📖 قبل النوم: من 222 إلى 286</p><p><b>المجموع: أقل من ساعة موزعة بطريقة خفيفة!</b></p><div id="baqara"></div></div>
+<button class="btn-pink" onclick="downloadAll()">📥 تحميل كل ذكرياتي</button>
+</div>
+
+<div class="nav">
+<button onclick="show('day',this)" class="active">🏠<br>اليوم</button>
+<button onclick="show('pray',this)">🕌<br>الصلاة</button>
+<button onclick="show('habits',this)">✅<br>عاداتي</button>
+<button onclick="show('diary',this)">✏️<br>يومياتي</button>
+<button onclick="show('money',this)">💰<br>ميزانيتي</button>
+<button onclick="show('media',this)">🎧<br>بودكاست</button>
+<button onclick="show('dua',this)">🤲<br>أدعيتي</button>
+</div>
+
+<script>
+let data=JSON.parse(localStorage.getItem('rafi9ati_v2')||'{}');
+let cur=1;
+let sel=document.getElementById('daySel');
+for(let i=1;i<=30;i++){let o=document.createElement('option');o.value=i;o.textContent='اليوم '+i+' من رمضان';sel.appendChild(o);}
+let quotes=["خطوة صغيرة اليوم، تصنع فرق كبير غدوة!","ما كاش طريقة واحدة صحيحة. ديري اللي يقدر عليه نهارك.","العادة الصغيرة اللي تداومي عليها، خير من الكبيرة اللي تحبسيها.","انتِ أقوى مما تتخيلي!","رفقا بروحك، راكي تديري أحسن ما تقدري!"];
+let quranDuasList=["﴿ رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ (127) رَبَّنَا وَاجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِنْ ذُرِّيَّتِنَا أُمَّةً مُسْلِمَةً لَكَ وَأَرِنَا مَنَاسِكَنَا وَتُبْ عَلَيْنَا إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ (128) ﴾ البقرة","﴿ رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ ﴾ [البقرة: 201]","﴿ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ﴾","﴿ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا ﴾","﴿ رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً ﴾","﴿ رَبَّنَا اغْفِرْ لَنَا ذُنُوبَنَا وَإِسْرَافَنَا فِي أَمْرِنَا وَثَبِّتْ أَقْدَامَنَا ﴾","﴿ رَبَّنَا لَا تَجْعَلْنَا مَعَ الْقَوْمِ الظَّالِمِينَ ﴾","﴿ رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَتَوَفَّنَا مُسْلِمِينَ ﴾","﴿ رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ ﴾","﴿ رَبِّ إِنِّي ظَلَمْتُ نَفْسِي فَاغْفِرْ لِي ﴾","﴿ رَبِّ ابْنِ لِي عِنْدَكَ بَيْتًا فِي الْجَنَّةِ ﴾"];
+let prophetList=[
+["سيدنا أيوب 🩷","رب انى مسنى الضر وانت ارحم الراحمين"],
+["سيدنا يونس","لا إله إلا أنت سبحانك إني كُنت من الظَالمين"],
+["سيدنا محمد ﷺ - عليه أفضل الصلاة والسلام","ربنا آتنا في الدنيا حسنه وفي الآخرة حسنة وقنا عذاب النار"],
+["سيدنا موسى","ربى انى لما أنزلت إلى من خير فقير"],
+["سيدنا نوح","رب انى مغلوب فانتصر"],
+["سيدنا إبراهيم","رب اجعلنى مقيم الصلاة ومن ذريتي ربنا و تقبل دعاء"],
+["سيدنا زكريا","رب لاتذرني فردا وانت خير الوارثين"],
+["سيدنا يعقوب","إنما اشكو بثي وحزني إلي الله"],
+["سيدنا يوسف","فاطر السماوات والأرض انت وليي في الدنيا و الآخرة توفني مسلما و الحقني بالصالحين"],
+["سيدنا هود","إني توكلت علي الله ربي وربكم ما من دابه إلا هو أخذ بناصيتها أن ربي علي صراط مستقيم"],
+["سيدنا سليمان","رب أوزعني أن أشكر نعمتك التي انمعت علي وعلي والدي و أن أعمل صالحا ترضاه وادخلني برحمتك في عبادك الصالحين"],
+["سيدنا شعيب","وسع ربنا كل شيء علما علي الله توكلنا ربنا افتح بيننا وبين قومنا بالحق و أنت خير الفاتحين"]
+];
+function ensure(){if(!data[cur])data[cur]={prayers:[],habits:{},habitNames:{},routine:[],todo:[],shop:[],media:[],baqara:{},checks:{}}; if(!data[cur].habitNames)data[cur].habitNames={}; if(!data.global)data.global={};}
+function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo(0,0);}
+function setDay(v){cur=parseInt(v);load();render();}
+function load(){ensure();
+['quran','sura','free','memory','myDua','istighfar','goal1','goal2','goal3','g1','g2','g3','g4','g5'].forEach(id=>{let el=document.getElementById(id);if(el)el.value=data[cur][id]||data.global?.[id]||'';});
+document.getElementById('topDay').textContent=cur;
+document.getElementById('dailyMotivation').textContent='🌸 '+quotes[(cur-1)%quotes.length];
+calcBudget(); renderQuranDuas(); renderProphet(); renderBaqara(); }
+function save(){ensure();
+['quran','sura','free','memory','myDua','istighfar','g1','g2','g3','g4','g5'].forEach(id=>{let el=document.getElementById(id);if(el)data[cur][id]=el.value;});
+['goal1','goal2','goal3'].forEach(id=>{let el=document.getElementById(id);if(el){if(!data.global)data.global={};data.global[id]=el.value;}});
+localStorage.setItem('rafi9ati_v2',JSON.stringify(data));render();}
+function saveDay(){save();document.getElementById('saved').textContent='تم الحفظ! 💖';setTimeout(()=>document.getElementById('saved').textContent='',2000);}
+function calcBudget(){let inc=parseInt(document.getElementById('income')?.value||0),sv=parseInt(document.getElementById('saving')?.value||0),sq=parseInt(document.getElementById('sadaqa')?.value||0);document.getElementById('bIncome').textContent=inc;document.getElementById('bSaving').textContent=sv;document.getElementById('bSadaqa').textContent=sq;document.getElementById('bLeft').textContent=inc-sv-sq; if(!data.global)data.global={};data.global.budget={inc,sv,sq};localStorage.setItem('rafi9ati_v2',JSON.stringify(data));}
+function render(){
+ensure();
+// prayers
+let pc=document.getElementById('prayers');pc.innerHTML='';
+['الفجر','الظهر','العصر','المغرب','العشاء + التراويح'].forEach((p,idx)=>{let d=document.createElement('div');d.className='pray'+(data[cur].prayers.includes(idx)?' done':'');d.textContent=data[cur].prayers.includes(idx)?'✅ '+p:p;d.onclick=()=>{if(data[cur].prayers.includes(idx))data[cur].prayers=data[cur].prayers.filter(x=>x!==idx);else data[cur].prayers.push(idx);save();render();};pc.appendChild(d);});
+// moods
+let mo=document.getElementById('moods');mo.innerHTML='';
+['😊 فرحانة','😌 مرتاحة','🤲 خاشعة','😴 عيانة','🥹 متأثرة','💖 متحمسة','😔 حزينة','🌸 متفائلة'].forEach(m=>{let b=document.createElement('button');b.className='moodBtn'+(data[cur].mood===m?' active':'');b.textContent=m;b.onclick=()=>{data[cur].mood=m;save();render();};mo.appendChild(b);});
+let en=document.getElementById('energy');en.innerHTML='';
+['🔋 ضعيفة','🔋🔋 متوسطة','🔋🔋🔋 قوية','🔋🔋🔋🔋 نار!'].forEach((e,idx)=>{let b=document.createElement('button');b.className='moodBtn'+(data[cur].energy===idx?' active':'');b.textContent=e;b.onclick=()=>{data[cur].energy=idx;save();render();};en.appendChild(b);});
+// habits table 10 x 30
+let body=document.getElementById('habitBody');body.innerHTML='';
+for(let h=1;h<=10;h++){
+let tr=document.createElement('tr');
+let tdName=document.createElement('td');let inp=document.createElement('input');inp.placeholder='عادة '+h+' - اكتبي عادتك';inp.value=data.global?.['habit'+h]||'';inp.oninput=()=>{if(!data.global)data.global={};data.global['habit'+h]=inp.value;save();};tdName.appendChild(inp);tr.appendChild(tdName);
+// show only 10 days per row? Show all 30 in scroll - create 30 cells grouped
+for(let d=1;d<=30;d++){
+let td=document.createElement('td');let c=document.createElement('span');c.className='cell'+(data[d]?.habits?.[h]?' done':'');c.textContent=data[d]?.habits?.[h]?'✔️':d;c.onclick=()=>{if(!data[d])data[d]={prayers:[],habits:{},habitNames:{}};data[d].habits[h]=!data[d].habits[h];save();render();};td.appendChild(c);tr.appendChild(td);
+}
+body.appendChild(tr);
+}
+// todo
+let todoEl=document.getElementById('todo');todoEl.innerHTML='';
+if(!data[cur].todo.length)data[cur].todo=[{text:'',done:false}];
+data[cur].todo.forEach((it,idx)=>{let div=document.createElement('div');div.className='row';let inp=document.createElement('input');inp.placeholder='مهمة اليوم...';inp.value=it.text;inp.oninput=()=>{data[cur].todo[idx].text=inp.value;save();};let chk=document.createElement('button');chk.className='check'+(it.done?' done':'');chk.textContent=it.done?'✔️':'';chk.onclick=()=>{data[cur].todo[idx].done=!it.done;save();render();};div.appendChild(inp);div.appendChild(chk);todoEl.appendChild(div);});
+// routine
+let r=document.getElementById('routine');r.innerHTML='';
+if(!data[cur].routine.length)data[cur]
