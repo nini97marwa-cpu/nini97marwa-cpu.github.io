@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رفيقتي 🪷</title>
+<style>
+*{box-sizing:border-box;font-family:Tahoma,sans-serif}
+body{margin:0;background:#FFF5F7;color:#4A1A2A;padding:0 0 100px}
+.top{padding:20px 16px;text-align:center;background:#F06292;color:#fff;border-radius:0 0 26px 26px}
+.page{display:none;max-width:560px;margin:auto;padding:16px}
+.page.active{display:block}
+.card{background:#fff;border:1.5px solid #FCE4EC;border-radius:20px;padding:15px;margin-top:14px}
+.card h3{margin:0 0 6px;color:#C2185B}
+.card p{font-size:13px;color:#8A5A6E;line-height:1.7;margin:0}
+input,textarea,select{width:100%;padding:12px;border:1.5px solid #F8BBD0;border-radius:13px;margin-top:8px;font-size:14px}
+textarea{min-height:70px}
+button{border:none;padding:13px;border-radius:13px;font-weight:bold;cursor:pointer;font-size:15px}
+.btn-pink{background:#C2185B;color:#fff;width:100%;margin-top:10px}
+.prayGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pray{padding:12px;border-radius:14px;border:1.5px solid #F8BBD0;text-align:center;cursor:pointer;background:#fff}
+.pray.done{background:#C2185B;color:#fff}
+.moodBtn{padding:9px 12px;border-radius:20px;border:1.5px solid #F8BBD0;background:#fff;cursor:pointer;margin:4px 2px}
+.moodBtn.active{background:#F8BBD0;font-weight:bold}
+.check{width:44px;height:44px;border-radius:12px;border:2px solid #F8BBD0;background:#fff;font-size:18px;cursor:pointer;flex-shrink:0}
+.check.done{background:#C2185B;color:#fff}
+.rowFlex{display:flex;gap:8px;align-items:center;margin-top:8px}
+.rowFlex input{margin:0;flex:1}
+.nav{position:fixed;bottom:12px;left:12px;right:12px;max-width:560px;margin:auto;background:#fff;border-radius:22px;box-shadow:0 8px 25px rgba(0,0,0,.15);display:flex;padding:8px;border:1.5px solid #FCE4EC;z-index:99}
+.nav button{flex:1;background:transparent;color:#9A7A8A;font-size:12px;padding:8px 2px}
+.nav button.active{background:#FCE4EC;color:#C2185B;border-radius:14px}
+.hint{background:#FFF8E1;border:1.5px solid #F5D9A0;border-radius:12px;padding:10px;font-size:13px;line-height:1.7;margin-top:10px}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th,td{border:1px solid #F8BBD0;padding:6px;text-align:center;font-size:12px}
+th{background:#FCE4EC}
+td input{margin:0;padding:6px;font-size:12px}
+.cell{width:28px;height:28px;border-radius:7px;background:#FCE4EC;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:auto}
+.cell.done{background:#C2185B;color:#fff}
+.star{font-size:22px;cursor:pointer}
+.duaBox{background:#FFF8E1;border:1.5px solid #F5D9A0;border-radius:14px;padding:12px;margin-top:10px;line-height:2;text-align:center}
+</style>
+</head>
+<body>
+<div class="top"><h1>رفيقتي 🪷</h1><p>رفيقتك في رمضان - 30 يوم<br>اليوم <span id="topDay">1</span> من 30</p><select id="daySel" onchange="setDay(this.value)"></select></div>
+
+<div id="p-day" class="page active">
+<div class="card"><h3>💖 مشاعري اليوم</h3><p>اختاري شعورك و طاقتك. هادا يساعدك تفهمي روحك أكثر.</p><p style="margin-top:10px"><b>مشاعري:</b></p><div id="moods"></div><p style="margin-top:10px"><b>⚡ طاقتي:</b></p><div id="energy"></div></div>
+<div class="card"><h3>🕌 الصلاة</h3><p>اضغطي على الصلاة كي تصليها.</p><div class="prayGrid" id="prayers"></div></div>
+<div class="card"><h3>📖 القرآن</h3><p>القرآن هو نور رمضان. حتى صفحة وحدة تفرق!</p><input id="quran" placeholder="شحال قريتي؟ مثلا: 5 صفحات"><input id="sura" placeholder="السورة؟ مثلا: البقرة"></div>
+<div class="card"><h3>🎯 3 أهدافي في رمضان</h3><p><b>كيفاش؟</b> اكتبي 3 أهداف برك، ماشي 10! هدف واضح و صغير أحسن من هدف كبير ما تكمليهش.</p><input id="goal1" placeholder="هدفي 1"><input id="goal2" placeholder="هدفي 2"><input id="goal3" placeholder="هدفي 3"></div>
+</div>
+
+<div id="p-journey" class="page"><div class="card"><h3>🗺️ رحلتي - 30 يوم</h3><p>اضغطي على اليوم باه تروحي ليه.</p><div id="grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px"></div></div><div class="card"><h3>✨ عبارة اليوم</h3><p id="quoteBox" style="text-align:center;color:#C2185B;font-weight:bold">العادة الصغيرة اللي تداومي عليها، خير من الكبيرة اللي تحبسيها.</p><button class="btn-pink" onclick="newQuote()">عبارة جديدة 💖</button></div></div>
+
+<div id="p-diary" class="page"><div class="card"><h3>✍️ يومياتي</h3><textarea id="free" placeholder="اكتبي اللي يجي في بالك..."></textarea></div><div class="card"><h3>🌙 ذكرى اليوم</h3><input id="memory" placeholder="أجمل ذكرى اليوم كانت..."></div><div class="card"><h3>🙏 الامتنان - 5 أشياء</h3><input id="g1" placeholder="1. أنا ممتنة لـ ..."><input id="g2" placeholder="2. أنا ممتنة لـ ..."><input id="g3" placeholder="3. أنا ممتنة لـ ..."><input id="g4" placeholder="4. أنا ممتنة لـ ..."><input id="g5" placeholder="5. أنا ممتنة لـ ..."></div></div>
+
+<div id="p-dua" class="page"><div class="card"><h3>🤲 أدعيتي</h3><p style="text-align:center;color:#C2185B;font-weight:bold;font-size:16px">« أَمَّن يُجِيبُ الْمُضْطَرَّ إِذَا دَعَاهُ »</p><p>الدعاء هو عبادة، و ربي يسمعك في كل وقت. اكتبي هنا أدعيتك و استغفارك.</p><p style="margin-top:10px"><b>استغفاري اليوم:</b></p><input id="istighfar" placeholder="مثلا: أستغفر الله 100 مرة..."><p style="margin-top:10px"><b>دعائي الخاص:</b></p><textarea id="dua" placeholder="اللهم ..."></textarea></div><div class="card"><h3>📖 أدعية من القرآن الكريم</h3><div class="duaBox">قال جل شأنه :<br>﴿ رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ ﴾<br>﴿ رَبَّنَا وَاجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِن ذُرِّيَّتِنَا أُمَّةً مُّسْلِمَةً لَّكَ وَأَرِنَا مَنَاسِكَنَا وَتُبْ عَلَيْنَا إِنَّكَ أَنتَ التَّوَّابُ الرَّحِيمُ ﴾</div></div></div>
+
+<div id="p-habits" class="page">
+<div class="card"><h3>✅ متتبع العادات - 30 يوم × 10 عادات</h3><p><b>كيفاش؟</b> اكتبي 10 عادات، و كل يوم كوشي ✔️. حركي الجدول لليسار باه تشوفي كل الأيام! القرآن و الصلاة كل وحدة وحدها!</p><div style="overflow-x:auto;margin-top:10px"><table><thead><tr><th>العادة</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th></tr></thead><tbody id="habitBody"></tbody></table></div></div>
+<div class="card"><h3>⏰ روتيني اليومي</h3><p><b>كيفاش؟</b> انتي تتحكمي في الوقت! اكتبي الوقت اللي يناسبك و واش تديري فيه، و كوشي ✔️.</p><div id="routine"></div><button class="btn-pink" onclick="addRoutine()">+ زيدي خطوة في روتيني</button></div>
+<div class="card"><h3>✅ مهامي اليوم</h3><div id="tasks"></div><button class="btn-pink" onclick="addTask()">+ زيدي مهمة</button></div>
+</div>
+
+<div id="p-extra" class="page">
+<div class="card"><h3>💰 منظم ميزانية رمضان</h3><p><b>كيفاش؟</b> اكتبي مدخولك، و شحال تدخري، و شحال تتصدقي، و الباقي يتحسب وحدو!</p><p><b>مدخولي:</b></p><input type="number" id="income" placeholder="مثلا: 20000" oninput="calcBudget()"><p><b>الادخار:</b></p><input type="number" id="saving" placeholder="مثلا: 5000" oninput="calcBudget()"><p><b>الصدقة:</b></p><input type="number" id="sadaqa" placeholder="مثلا: 2000" oninput="calcBudget()"><div class="hint"><b>المتبقي ليك:</b> <span id="remain" style="color:#C2185B;font-weight:bold">0 دج</span></div></div>
+<div class="card"><h3>🛒 مشترياتي</h3><p>اكتبي واش حابة تشري، و كوشي تم ✔️</p><div id="shopping"></div><button class="btn-pink" onclick="addShop()">+ زيدي حاجة نشريها</button></div>
+<div class="card"><h3>🎧 بودكاست و فيديوهات مفيدة</h3><p><b>كيفاش؟</b> اكتبي العنوان، قيّميه بالنجوم ⭐، و كوشي ✔️. كل فيديو عندو نجوم وحدو و ✔️ وحدو!</p><div id="videos"></div><button class="btn-pink" onclick="addVideo()">+ زيدي فيديو / بودكاست</button></div>
+<div class="card"><h3>🛡️ سلامتك أولا</h3><p>هاد البلانر رفيقة تنظيم و تأمل، و ليست علاجا نفسيا. إذا كان التعب مستمرا، احكي مع مختصة تثقي بها.</p></div>
+</div>
+
+<div class="nav">
+<button onclick="showPage('day',this)" class="active">🏠<br>اليوم</button>
+<button onclick="showPage('journey',this)">🗺️<br>رحلتي</button>
+<button onclick="showPage('diary',this)">✏️<br>يومياتي</button>
+<button onclick="showPage('dua',this)">🤲<br>أدعيتي</button>
+<button onclick="showPage('habits',this)">✅<br>عاداتي</button>
+<button onclick="showPage('extra',this)">💰<br>المزيد</button>
+</div>
+
+<script>
+window.showPage = function(id, btn){
+  var pages = document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++){ pages[i].classList.remove('active'); }
+  document.getElementById('p-'+id).classList.add('active');
+  var btns = document.querySelectorAll('.nav button');
+  for(var j=0;j<btns.length;j++){ btns[j].classList.remove('active'); }
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+};
+var cur = 1;
+var habitChecks = {};
+var routineData = [{time:'05:00',text:'',done:false},{time:'08:00',text:'',done:false},{time:'17:00',text:'',done:false}];
+var tasksData = [];
+var shopData = [];
+var videoData = [];
+var sel = document.getElementById('daySel');
+for(var i=1;i<=30;i++){ var o=document.createElement('option'); o.value=i; o.textContent='اليوم '+i; sel.appendChild(o); }
+window.setDay = function(v){ cur = parseInt(v); document.getElementById('topDay').textContent = cur; };
+var quotes = ["خطوة صغيرة اليوم، تصنع فرق كبير غدوة!","العادة الصغيرة اللي تداومي عليها، خير من الكبيرة اللي تحبسيها.","رفقا بروحك، راكي تديري أحسن ما تقدري!"];
+window.newQuote = function(){ document.getElementById('quoteBox').textContent = quotes[Math.floor(Math.random()*quotes.length)]; };
+window.calcBudget = function(){
+  var inc = parseInt(document.getElementById('income').value)||0;
+  var sav = parseInt(document.getElementById('saving').value)||0;
+  var sad = parseInt(document.getElementById('sadaqa').value)||0;
+  document.getElementById('remain').textContent = (inc - sav - sad) + ' دج';
+};
+function renderMoods(){
+  var mo = document.getElementById('moods'); mo.innerHTML='';
+  var list = ['😊 فرحانة','😌 مرتاحة','🤲 خاشعة','😴 عيانة','🥹 متأثرة','💖 متحمسة','😔 حزينة','🌸 متفائلة'];
+  for(var i=0;i<list.length;i++){
+    (function(txt){
+      var b=document.createElement('button'); b.className='moodBtn'; b.textContent=txt;
+      b.onclick=function(){ var all=mo.querySelectorAll('button'); for(var k=0;k<all.length;k++) all[k].classList.remove('active'); b.classList.add('active'); };
+      mo.appendChild(b);
+    })(list[i]);
+  }
+  var en = document.getElementById('energy'); en.innerHTML='';
+  var elist = ['🔋 ضعيفة','🔋🔋 متوسطة','🔋🔋🔋 قوية','🔋🔋🔋🔋 نار!'];
+  for(var j=0;j<elist.length;j++){
+    (function(txt){
+      var b=document.createElement('button'); b.className='moodBtn'; b.textContent=txt;
+      b.onclick=function(){ var all=en.querySelectorAll('button'); for(var k=0;k<all.length;k++) all[k].classList.remove('active'); b.classList.add('active'); };
+      en.appendChild(b);
+    })(elist[j]);
+  }
+}
+function renderPrayers(){
+  var pc=document.getElementById('prayers'); pc.innerHTML='';
+  var plist=['الفجر','الظهر','العصر','المغرب','العشاء + التراويح'];
+  for(var i=0;i<plist.length;i++){
+    (function(txt){
+      var d=document.createElement('div'); d.className='pray'; d.textContent=txt;
+      d.onclick=function(){ d.classList.toggle('done'); if(d.classList.contains('done')) d.textContent='✅ '+txt; else d.textContent=txt; };
+      pc.appendChild(d);
+    })(plist[i]);
+  }
+}
+function renderHabits(){
+  var hb=document.getElementById('habitBody'); hb.innerHTML='';
+  for(var h=1;h<=10;h++){
+    (function(h){
+      var tr=document.createElement('tr');
+      var td=document.createElement('td'); var inp=document.createElement('input'); inp.placeholder='عادة '+h; td.appendChild(inp); tr.appendChild(td);
+      for(var d=1;d<=30;d++){
+        (function(d){
+          var td2=document.createElement('td'); var cell=document.createElement('div'); cell.className='cell';
+          cell.onclick=function(){ cell.classList.toggle('done'); cell.textContent = cell.classList.contains('done') ? '✔️' : ''; };
+          td2.appendChild(cell); tr.appendChild(td2);
+        })(d);
+      }
+      hb.appendChild(tr);
+    })(h);
+  }
+}
+function renderRoutine(){
+  var r=document.getElementById('routine'); r.innerHTML='';
+  for(var i=0;i<routineData.length;i++){
+    (function(i){
+      var div=document.createElement('div'); div.className='rowFlex';
+      var t=document.createElement('input'); t.type='time'; t.value=routineData[i].time; t.style.width='110px'; t.style.flex='none';
+      var tx=document.createElement('input'); tx.placeholder='واش تديري؟'; tx.value=routineData[i].text;
+      var chk=document.createElement('button'); chk.className='check'+(routineData[i].done?' done':''); chk.textContent=routineData[i].done?'✔️':'';
+      chk.onclick=function(){ routineData[i].done=!routineData[i].done; renderRoutine(); };
+      div.appendChild(t); div.appendChild(tx); div.appendChild(chk); r.appendChild(div);
+    })(i);
+  }
+}
+window.addRoutine=function(){ routineData.push({time:'12:00',text:'',done:false}); renderRoutine(); };
+function renderTasks(){
+  var tk=document.getElementById('tasks'); tk.innerHTML='';
+  for(var i=0;i<tasksData.length;i++){
+    (function(i){
+      var div=document.createElement('div'); div.className='rowFlex';
+      var tx=document.createElement('input'); tx.placeholder='مهمة...';
+      var chk=document.createElement('button'); chk.className='check'+(tasksData[i].done?' done':''); chk.textContent=tasksData[i].done?'✔️':'';
+      chk.onclick=function(){ tasksData[i].done=!tasksData[i].done; renderTasks(); };
+      div.appendChild(tx); div.appendChild(chk); tk.appendChild(div);
+    })(i);
+  }
+}
+window.addTask=function(){ tasksData.push({done:false}); renderTasks(); };
+function renderShop(){
+  var sh=document.getElementById('shopping'); sh.innerHTML='';
+  for(var i=0;i<shopData.length;i++){
+    (function(i){
+      var div=document.createElement('div'); div.className='rowFlex';
+      var tx=document.createElement('input'); tx.placeholder='واش حابة تشري؟';
+      var chk=document.createElement('button'); chk.className='check'+(shopData[i].done?' done':''); chk.textContent=shopData[i].done?'✔️ تم':'';
+      chk.onclick=function(){ shopData[i].done=!shopData[i].done; renderShop(); };
+      div.appendChild(tx); div.appendChild(chk); sh.appendChild(div);
+    })(i);
+  }
+}
+window.addShop=function(){ shopData.push({done:false}); renderShop(); };
+function renderVideos(){
+  var vd=document.getElementById('videos'); vd.innerHTML='';
+  for(var i=0;i<videoData.length;i++){
+    (function(i){
+      var box=document.createElement('div'); box.style.cssText='background:#FFF5F7;border:1.5px solid #FCE4EC;border-radius:14px;padding:10px;margin-top:8px';
+      var tx=document.createElement('input'); tx.placeholder='عنوان الفيديو / البودكاست...';
+      var row=document.createElement('div'); row.style.cssText='display:flex;gap:6px;align-items:center;margin-top:8px';
+      var stars=document.createElement('div');
+      for(var s=1;s<=5;s++){
+        (function(s){
+          var sp=document.createElement('span'); sp.className='star'; sp.textContent='☆';
+          sp.onclick=function(){ var all=stars.querySelectorAll('span'); for(var k=0;k<all.length;k++) all[k].textContent = k < s ? '⭐' : '☆'; };
+          stars.appendChild(sp);
+        })(s);
+      }
+      var chk=document.createElement('button'); chk.className='check'+(videoData[i].done?' done':''); chk.textContent=videoData[i].done?'✔️':'';
+      chk.onclick=function(){ videoData[i].done=!videoData[i].done; renderVideos(); };
+      row.appendChild(stars); row.appendChild(chk);
+      box.appendChild(tx); box.appendChild(row); vd.appendChild(box);
+    })(i);
+  }
+}
+window.addVideo=function(){ videoData.push({done:false}); renderVideos(); };
+var g=document.getElementById('grid');
+for(var gi=1;gi<=30;gi++){
+  (function(gi){
+    var d=document.createElement('div'); d.style.cssText='aspect-ratio:1;border-radius:11px;background:#FCE4EC;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer'; d.textContent=gi;
+    d.onclick=function(){ sel.value=gi; window.setDay(gi); window.showPage('day', document.querySelector('.nav button')); };
+    g.appendChild(d);
+  })(gi);
+}
+renderMoods(); renderPrayers(); renderHabits(); renderRoutine(); renderTasks(); renderShop(); renderVideos();
+</script>
+</body>
+</html>
